@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Create an EC2 instance with a Security Group
+
+Resources:
+  MySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow SSH and HTTP access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0   # Allow SSH from anywhere
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0   # Allow HTTP from anywhere
+
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro     # Free-tier eligible
+      ImageId: ami-0bbdd8c17ed981ef9     # Replace with a valid AMI ID in your region
+      SecurityGroupIds:
+        - !Ref MySecurityGroup
+      KeyName: abcd       # Replace with your key pair name
+      Tags:
+        - Key: name
+          Value: xyz  
+
+
